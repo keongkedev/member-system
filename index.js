@@ -43,6 +43,30 @@ app.get("/error", function (req, res) {
   const msg = req.query.msg;
   res.render("error.ejs", { msg: msg });
 });
+// 登出會員
+app.get("/signout", function (req, res) {
+  req.session.member = null;
+  res.redirect("/");
+});
+
+// 登入會員
+app.post("/signin", async function (req, res) {
+  const email = req.body.email;
+  const password = req.body.password;
+  // 檢查資料庫中的資料
+  const collection = db.collection("member");
+  let result = await collection.findOne({
+    $and: [{ email: email }, { password: password }],
+  });
+  if (result === null) {
+    //沒有對應的會員資料，登入失敗
+    res.redirect("/error?msg=登入失敗，郵件或密碼輸入錯誤");
+    return;
+  }
+  // 登入成功，紀錄會員資訊在 Session 中
+  req.session.member = result;
+  res.redirect("/member");
+});
 // 註冊會員
 app.post("/signup", async function (req, res) {
   const name = req.body.name;
