@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>會員頁面</title>
-</head>
-<body>
+  </head>
+  <body>
     <h3>這是會員頁面</h3>
-    <div>哈囉，歡迎光臨</div>
+    <div>哈囉，<%= name %>，歡迎光臨</div>
+    <h3>所有會員資料</h3>
+    <% for(let i=0; i < data.length; i++){ %>
+    <div><%= data[i].name %></div>
+    <% } %>
     <div>
-        <a href="/signout">登出會員</a>
+      <a href="/signout">登出會員</a>
     </div>
-</body>
+  </body>
 </html>

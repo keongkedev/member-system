@@ -35,8 +35,20 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", function (req, res) {
   res.render("index.ejs");
 });
-app.get("/member", function (req, res) {
-  res.render("member.ejs");
+app.get("/member", async function (req, res) {
+  if (!req.session.member) {
+    res.redirect("/");
+    return;
+  }
+  const name = req.session.member.name;
+  // 取得所有會員的名稱
+  const collection = db.collection("member");
+  let result = await collection.find({});
+  let data = [];
+  await result.forEach(function (member) {
+    data.push(member);
+  });
+  res.render("member.ejs", { name: name, data: data });
 });
 // 連線到 /error?msg=錯誤訊息
 app.get("/error", function (req, res) {
